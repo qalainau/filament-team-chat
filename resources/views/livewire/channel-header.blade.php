@@ -3,9 +3,9 @@
         <div class="min-w-0">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white truncate">
                 @if($headerType === 'channel')
-                    <span class="text-gray-400 mr-1">#</span>
+                    <span class="text-gray-400 me-1">#</span>
                 @else
-                    <x-heroicon-o-chat-bubble-oval-left class="inline-block h-5 w-5 text-gray-400 mr-1" />
+                    <x-heroicon-o-chat-bubble-oval-left class="inline-block h-5 w-5 text-gray-400 me-1" />
                 @endif
                 {{ $headerName }}
             </h2>
