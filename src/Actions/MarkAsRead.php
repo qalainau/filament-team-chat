@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MarkAsRead
 {
-    public function execute(Model $readable, int $userId): void
+    public function execute(Model $readable, int|string $userId): void
     {
         $lastMessage = Message::where('messageable_type', $readable->getMorphClass())
             ->where('messageable_id', $readable->getKey())

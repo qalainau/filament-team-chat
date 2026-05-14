@@ -9,7 +9,7 @@ class ToggleReaction
     /**
      * Toggle a reaction on a message. Returns true if added, false if removed.
      */
-    public function execute(int $messageId, int $userId, string $emoji): bool
+    public function execute(int $messageId, int|string $userId, string $emoji): bool
     {
         $existing = Reaction::where('message_id', $messageId)
             ->where('user_id', $userId)

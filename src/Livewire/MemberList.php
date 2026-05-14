@@ -46,7 +46,7 @@ class MemberList extends Component
         return $conversation?->participants()->with('userStatus')->orderBy('name')->get() ?? collect();
     }
 
-    public function showProfile(int $userId): void
+    public function showProfile(int|string $userId): void
     {
         $this->dispatch('show-profile', userId: $userId);
     }

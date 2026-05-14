@@ -22,7 +22,7 @@ class Sidebar extends Component
 
     public bool $showStartDm = false;
 
-    public ?int $dmUserId = null;
+    public int|string|null $dmUserId = null;
 
     public function selectChannel(int $channelId): void
     {

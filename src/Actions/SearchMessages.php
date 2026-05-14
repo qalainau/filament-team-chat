@@ -10,7 +10,7 @@ use Illuminate\Support\Collection;
 
 class SearchMessages
 {
-    public function execute(int $userId, string $query, int $limit = 20): Collection
+    public function execute(int|string $userId, string $query, int $limit = 20): Collection
     {
         if (trim($query) === '') {
             return collect();

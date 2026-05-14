@@ -36,7 +36,7 @@ trait BelongsToTeam
         return $this->belongsTo($model, 'team_id');
     }
 
-    protected static function resolveCurrentTeamId(): ?int
+    protected static function resolveCurrentTeamId(): int|string|null
     {
         $resolver = config('team-chat.tenancy.resolver');
 
