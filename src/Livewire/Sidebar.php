@@ -158,6 +158,11 @@ class Sidebar extends Component
 
     public function getAvailableUsersProperty(): Collection
     {
+        $resolver = config('team-chat.tenancy.resolver');
+        if(is_string($resolver) && class_exists($resolver) && method_exists($resolver, 'getAvailableUsers')){
+            return $resolver::getAvailableUsers();
+        }
+
         $userModel = config('team-chat.user_model');
 
         return $userModel::where('id', '!=', auth()->id())
