@@ -39,7 +39,7 @@
 
                 {{-- Actions --}}
                 <div class="border-t border-gray-200 dark:border-gray-700 px-6 py-3 flex gap-2">
-                    @if($userId !== auth()->id())
+                    @if($canSendMessage)
                         <button
                             wire:click="startDm"
                             class="flex-1 rounded-lg bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"

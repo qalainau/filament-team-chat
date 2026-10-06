@@ -4,6 +4,7 @@ namespace Filament\TeamChat\Livewire;
 
 use Filament\TeamChat\Actions\MarkAsRead;
 use Filament\TeamChat\Actions\ToggleReaction;
+use Filament\TeamChat\Enums\Feature;
 use Filament\TeamChat\Models\Channel;
 use Filament\TeamChat\Models\Conversation;
 use Filament\TeamChat\Models\Message;
@@ -96,11 +97,17 @@ class MessageFeed extends Component
 
     public function toggleEmojiPicker(int $messageId): void
     {
+        if (! Feature::Reactions->isEnabled()) {
+            return;
+        }
+
         $this->emojiPickerMessageId = $this->emojiPickerMessageId === $messageId ? null : $messageId;
     }
 
     public function addReaction(int $messageId, string $emoji): void
     {
+        abort_unless(Feature::Reactions->isEnabled(), 403);
+
         app(ToggleReaction::class)->execute($messageId, auth()->id(), $emoji);
         $this->emojiPickerMessageId = null;
     }
@@ -153,6 +160,10 @@ class MessageFeed extends Component
 
     public function openThread(int $messageId): void
     {
+        if (! Feature::Threads->isEnabled()) {
+            return;
+        }
+
         $this->dispatch('open-thread', messageId: $messageId);
     }
 

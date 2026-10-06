@@ -33,6 +33,7 @@ return [
     'type_message' => 'メッセージを入力... (@でメンション)',
     'notify_all' => '全員に通知',
     'notify_online' => 'オンライン全員に通知',
+    'attached_file' => 'ファイルを添付しました',
 
     // Channel Header
     'members' => 'メンバー',
@@ -64,6 +65,7 @@ return [
     // Team Chat Page
     'select_channel_or_dm' => 'チャンネルまたはDMを選択してください',
     'select_channel_hint' => '左のサイドバーからチャンネルを選択するか、DMを開始してください。',
+    'back' => '戻る',
 
     // Conversation
     'group_dm' => 'グループDM',

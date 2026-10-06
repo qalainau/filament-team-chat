@@ -5,6 +5,7 @@ namespace Filament\TeamChat\Pages;
 use BackedEnum;
 use Filament\Pages\Page;
 use Filament\Support\Enums\Width;
+use Filament\TeamChat\Enums\Feature;
 use Livewire\Attributes\On;
 
 class TeamChat extends Page
@@ -36,11 +37,16 @@ class TeamChat extends Page
 
     public ?int $threadParentId = null;
 
+    /**
+     * Whether the sidebar (instead of the chat) is shown on small screens.
+     */
+    public bool $showSidebarOnMobile = true;
+
     public function mount(): void
     {
         auth()->user()->touchOnline();
 
-        $channel = auth()->user()->channels()->first();
+        $channel = Feature::Channels->isEnabled() ? auth()->user()->channels()->first() : null;
 
         if ($channel) {
             $this->activeType = 'channel';
@@ -53,6 +59,7 @@ class TeamChat extends Page
     {
         $this->activeType = 'channel';
         $this->activeId = $channelId;
+        $this->showSidebarOnMobile = false;
         $this->showThreadPanel = false;
         $this->threadParentId = null;
     }
@@ -62,6 +69,7 @@ class TeamChat extends Page
     {
         $this->activeType = 'conversation';
         $this->activeId = $conversationId;
+        $this->showSidebarOnMobile = false;
         $this->showThreadPanel = false;
         $this->threadParentId = null;
     }
@@ -69,6 +77,10 @@ class TeamChat extends Page
     #[On('open-thread')]
     public function openThread(int $messageId): void
     {
+        if (! Feature::Threads->isEnabled()) {
+            return;
+        }
+
         $this->threadParentId = $messageId;
         $this->showThreadPanel = true;
     }
@@ -78,5 +90,11 @@ class TeamChat extends Page
     {
         $this->showThreadPanel = false;
         $this->threadParentId = null;
+    }
+
+    #[On('show-chat-sidebar')]
+    public function showSidebar(): void
+    {
+        $this->showSidebarOnMobile = true;
     }
 }

@@ -11,13 +11,22 @@
             window.addEventListener('resize', update);
         "
         :style="'height: ' + height + 'px'"
-        class="tc-chat-container flex overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900"
+        class="tc-chat-container relative flex overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900"
     >
-        {{-- Chat Sidebar --}}
-        <livewire:team-chat::sidebar :active-type="$activeType" :active-id="$activeId" :wire:key="'sidebar'" />
+        {{-- Chat Sidebar (on small screens, shown instead of the chat) --}}
+        <div @class([
+            'h-full w-full shrink-0 md:block md:w-64',
+            'hidden' => ! $showSidebarOnMobile,
+        ])>
+            <livewire:team-chat::sidebar :active-type="$activeType" :active-id="$activeId" :wire:key="'sidebar'" />
+        </div>
 
         {{-- Main content area --}}
-        <div class="flex flex-1 flex-col min-w-0">
+        <div @class([
+            'flex-1 flex-col min-w-0 md:flex',
+            'hidden' => $showSidebarOnMobile,
+            'flex' => ! $showSidebarOnMobile,
+        ])>
             @if($activeId)
                 {{-- Channel/Conversation Header --}}
                 <div class="shrink-0">
@@ -50,7 +59,7 @@
 
         {{-- Thread Panel --}}
         @if($showThreadPanel && $threadParentId)
-            <div class="w-96 border-s border-gray-200 dark:border-gray-700 flex flex-col bg-white dark:bg-gray-900">
+            <div class="absolute inset-0 z-20 md:static md:w-96 border-s border-gray-200 dark:border-gray-700 flex flex-col bg-white dark:bg-gray-900">
                 <livewire:team-chat::thread-panel :parent-message-id="$threadParentId" :wire:key="'thread-'.$threadParentId" />
             </div>
         @endif

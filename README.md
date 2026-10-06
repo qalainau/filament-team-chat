@@ -60,8 +60,13 @@
 
 ### Technical
 - **Multi-Tenancy** — Optional `team_id` scoping with Filament tenant auto-detection
+- **Restrict Who Can Chat** — Limit the users each person can find and DM
+- **Feature Toggles** — Turn off channels, threads, reactions, or search (e.g. 1-on-1 helpdesk mode)
+- **Responsive** — On mobile, the sidebar and the chat are shown one at a time with a back button
+- **RTL & i18n** — Right-to-left layout support; English, Japanese, and Persian translations
+- **UUID / ULID Keys** — Works with UUID or ULID user and tenant primary keys
 - **Dark Mode** — Follows your Filament panel theme
-- **102 Tests** — Comprehensive test suite with Orchestra Testbench
+- **128 Tests** — Comprehensive test suite with Orchestra Testbench
 
 ## Installation
 
@@ -151,6 +156,15 @@ return [
 
     'user_model' => \App\Models\User::class,
 
+    'user_key_type' => 'int', // 'int', 'uuid', or 'ulid'
+
+    'features' => [
+        'channels' => true,
+        'threads' => true,
+        'reactions' => true,
+        'search' => true,
+    ],
+
     'polling' => [
         'messages' => 3,  // seconds
         'sidebar' => 5,   // seconds
@@ -166,6 +180,7 @@ return [
         'enabled' => false,
         'model' => null,    // e.g. \App\Models\Team::class
         'resolver' => null, // null = Filament::getTenant()
+        'key_type' => 'int', // 'int', 'uuid', or 'ulid'
     ],
 ];
 ```
@@ -179,6 +194,47 @@ Set `tenancy.enabled` to `true` to scope channels and conversations per team. Th
 | Auto (default) | `null` | Uses `Filament::getTenant()` |
 | Callable | `fn () => auth()->user()->team_id` | Custom closure |
 | Class | `TenantResolver::class` | Must have `resolve()` method |
+
+### Restricting Who Can Chat
+
+By default, users can start a DM with (and @mention) every other user. Use `modifyAvailableUsersQueryUsing()` to restrict this — for example by role or team. The restriction is applied to the DM user list, @mention suggestions, profile cards, and enforced on the server when a DM is started.
+
+```php
+use Illuminate\Database\Eloquent\Builder;
+
+FilamentTeamChatPlugin::make()
+    ->modifyAvailableUsersQueryUsing(function (Builder $query, User $user): Builder {
+        if ($user->is_admin) {
+            return $query; // Admins can chat with everyone
+        }
+
+        // Others can chat with admins and members of their own teams
+        return $query->where(fn (Builder $query) => $query
+            ->where('is_admin', true)
+            ->orWhereHas('teams', fn (Builder $query) => $query->whereKey($user->teams->modelKeys())));
+    })
+```
+
+The query passed in already excludes the current user.
+
+### Helpdesk Mode (1-on-1 Only)
+
+Disable features you don't need in `config/team-chat.php`. Turning everything off leaves a simple 1-on-1 messenger:
+
+```php
+'features' => [
+    'channels' => false,
+    'threads' => false,
+    'reactions' => false,
+    'search' => false,
+],
+```
+
+Combine it with `modifyAvailableUsersQueryUsing()` so that, for example, customers can only message support staff.
+
+### UUID / ULID Primary Keys
+
+If your user (or tenant) model uses UUID or ULID primary keys, set `user_key_type` (or `tenancy.key_type`) to `'uuid'` or `'ulid'` **before running the migrations**. The foreign key columns are then created with the matching type.
 
 ## Programmatic API
 

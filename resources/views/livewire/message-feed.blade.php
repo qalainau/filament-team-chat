@@ -1,3 +1,7 @@
+@php
+    $threadsEnabled = \Filament\TeamChat\Enums\Feature::Threads->isEnabled();
+    $reactionsEnabled = \Filament\TeamChat\Enums\Feature::Reactions->isEnabled();
+@endphp
 <div class="h-full overflow-y-auto p-4 space-y-1" id="message-feed" wire:poll.{{ config('team-chat.polling.messages', 3) }}s>
     @if($this->messages->isEmpty())
         <div class="flex h-full items-center justify-center">
@@ -29,21 +33,25 @@
                         @endif
 
                         {{-- Action bar (visible on hover) --}}
-                        <div class="ms-auto flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button
-                                wire:click="openThread({{ $message->id }})"
-                                class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-0.5"
-                                title="{{ __('team-chat::messages.reply') }}"
-                            >
-                                <x-heroicon-o-chat-bubble-left class="h-4 w-4" />
-                            </button>
-                            <button
-                                wire:click="toggleEmojiPicker({{ $message->id }})"
-                                class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-0.5"
-                                title="{{ __('team-chat::messages.react') }}"
-                            >
-                                <x-heroicon-o-face-smile class="h-4 w-4" />
-                            </button>
+                        <div class="ms-auto flex items-center gap-1 transition-opacity md:opacity-0 md:group-hover:opacity-100">
+                            @if($threadsEnabled)
+                                <button
+                                    wire:click="openThread({{ $message->id }})"
+                                    class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-0.5"
+                                    title="{{ __('team-chat::messages.reply') }}"
+                                >
+                                    <x-heroicon-o-chat-bubble-left class="h-4 w-4" />
+                                </button>
+                            @endif
+                            @if($reactionsEnabled)
+                                <button
+                                    wire:click="toggleEmojiPicker({{ $message->id }})"
+                                    class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-0.5"
+                                    title="{{ __('team-chat::messages.react') }}"
+                                >
+                                    <x-heroicon-o-face-smile class="h-4 w-4" />
+                                </button>
+                            @endif
                             @if($message->user_id === auth()->id())
                                 <button
                                     wire:click="startEditing({{ $message->id }})"
@@ -116,7 +124,7 @@
                     @endif
 
                     {{-- Reactions display --}}
-                    @if($message->reactions->isNotEmpty())
+                    @if($reactionsEnabled && $message->reactions->isNotEmpty())
                         <div class="mt-1 flex flex-wrap gap-1">
                             @foreach($message->reactions->groupBy('emoji') as $emoji => $reactions)
                                 <button
@@ -135,7 +143,7 @@
                     @endif
 
                     {{-- Inline emoji picker --}}
-                    @if($emojiPickerMessageId === $message->id)
+                    @if($reactionsEnabled && $emojiPickerMessageId === $message->id)
                         <div class="mt-1 flex flex-wrap gap-1 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 p-2 shadow-sm">
                             @foreach(['👍', '👎', '😄', '🎉', '❤️', '🚀', '👀', '🤔'] as $emoji)
                                 <button
@@ -149,7 +157,7 @@
                     @endif
 
                     {{-- Thread indicator --}}
-                    @if($message->replies_count > 0)
+                    @if($threadsEnabled && $message->replies_count > 0)
                         <button
                             wire:click="openThread({{ $message->id }})"
                             class="mt-1 flex items-center gap-1 text-xs text-primary-600 dark:text-primary-400 hover:underline"

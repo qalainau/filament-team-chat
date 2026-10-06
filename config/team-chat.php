@@ -26,6 +26,35 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | User Key Type
+    |--------------------------------------------------------------------------
+    |
+    | The primary key type of the user model: 'int', 'uuid', or 'ulid'.
+    | Used by the migrations to create matching foreign key columns, so set
+    | it before running them.
+    |
+    */
+    'user_key_type' => 'int',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Features
+    |--------------------------------------------------------------------------
+    |
+    | Toggle individual features. Disabling channels, threads, reactions
+    | and search turns the chat into a simple 1-on-1 messenger, e.g. for
+    | a helpdesk setup.
+    |
+    */
+    'features' => [
+        'channels' => true,
+        'threads' => true,
+        'reactions' => true,
+        'search' => true,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Polling Intervals (in seconds)
     |--------------------------------------------------------------------------
     */
@@ -59,5 +88,6 @@ return [
         'enabled' => false,
         'model' => null, // e.g. \App\Models\Team::class
         'resolver' => null, // callable or class that returns current tenant ID
+        'key_type' => 'int', // 'int', 'uuid', or 'ulid' — the tenant primary key type
     ],
 ];

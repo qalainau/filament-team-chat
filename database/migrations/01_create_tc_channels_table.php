@@ -1,5 +1,6 @@
 <?php
 
+use Filament\TeamChat\Support\TeamChatSchema;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -10,13 +11,13 @@ return new class extends Migration
     {
         Schema::create('tc_channels', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('team_id')->nullable()->index();
+            TeamChatSchema::teamId($table);
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
             $table->string('topic')->nullable();
             $table->string('type')->default('public');
-            $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();
+            TeamChatSchema::userForeignId($table, 'created_by')->constrained(TeamChatSchema::userTable())->cascadeOnDelete();
             $table->timestamp('archived_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

@@ -3,6 +3,7 @@
 namespace Filament\TeamChat\Livewire;
 
 use Filament\TeamChat\Actions\SendMessage;
+use Filament\TeamChat\Enums\Feature;
 use Filament\TeamChat\Models\Message;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Isolate;
@@ -47,7 +48,7 @@ class ThreadPanel extends Component
 
     public function sendReply(): void
     {
-        if (! $this->parentMessage || trim($this->replyBody) === '') {
+        if (! Feature::Threads->isEnabled() || ! $this->parentMessage || trim($this->replyBody) === '') {
             return;
         }
 

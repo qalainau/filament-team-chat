@@ -2,6 +2,7 @@
 
 namespace Filament\TeamChat\Livewire;
 
+use Filament\TeamChat\FilamentTeamChatPlugin;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -21,6 +22,8 @@ class UserProfileCard extends Component
 
     public bool $isOnline = false;
 
+    public bool $canSendMessage = false;
+
     #[On('show-profile')]
     public function loadProfile(int|string $userId): void
     {
@@ -39,6 +42,7 @@ class UserProfileCard extends Component
         $this->displayName = $status?->getDisplayName() ?? $user->name;
         $this->statusDisplay = $status?->getStatusDisplay();
         $this->isOnline = $status?->is_online ?? false;
+        $this->canSendMessage = FilamentTeamChatPlugin::get()->canMessageUser(auth()->user(), $user->getKey());
         $this->isOpen = true;
     }
 
@@ -49,7 +53,7 @@ class UserProfileCard extends Component
 
     public function startDm(): void
     {
-        if (! $this->userId) {
+        if (! $this->userId || ! FilamentTeamChatPlugin::get()->canMessageUser(auth()->user(), $this->userId)) {
             return;
         }
 

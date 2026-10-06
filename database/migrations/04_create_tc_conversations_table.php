@@ -1,5 +1,6 @@
 <?php
 
+use Filament\TeamChat\Support\TeamChatSchema;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -10,7 +11,7 @@ return new class extends Migration
     {
         Schema::create('tc_conversations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('team_id')->nullable()->index();
+            TeamChatSchema::teamId($table);
             $table->boolean('is_group')->default(false);
             $table->string('name')->nullable();
             $table->timestamps();

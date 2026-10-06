@@ -2,6 +2,8 @@
 
 namespace Filament\TeamChat\Livewire;
 
+use Filament\TeamChat\Enums\Feature;
+use Filament\TeamChat\FilamentTeamChatPlugin;
 use Filament\TeamChat\Models\Channel;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -26,6 +28,8 @@ class Sidebar extends Component
 
     public function selectChannel(int $channelId): void
     {
+        abort_unless(Feature::Channels->isEnabled(), 403);
+
         $channel = Channel::findOrFail($channelId);
 
         // Auto-join public channels on first access
@@ -60,6 +64,8 @@ class Sidebar extends Component
 
     public function createChannel(): void
     {
+        abort_unless(Feature::Channels->isEnabled(), 403);
+
         $this->validate([
             'newChannelName' => 'required|string|max:255',
         ]);
@@ -89,8 +95,14 @@ class Sidebar extends Component
     public function startDirectMessage(): void
     {
         $this->validate([
-            'dmUserId' => 'required|exists:users,id',
+            'dmUserId' => 'required',
         ]);
+
+        if (! FilamentTeamChatPlugin::get()->canMessageUser(auth()->user(), $this->dmUserId)) {
+            $this->addError('dmUserId', __('validation.exists', ['attribute' => 'user']));
+
+            return;
+        }
 
         $conversation = auth()->user()->findOrCreateDirectMessage($this->dmUserId);
 
@@ -108,6 +120,8 @@ class Sidebar extends Component
 
     public function joinChannel(int $channelId): void
     {
+        abort_unless(Feature::Channels->isEnabled(), 403);
+
         $channel = Channel::where('type', 'public')
             ->whereNull('archived_at')
             ->findOrFail($channelId);
@@ -130,6 +144,10 @@ class Sidebar extends Component
 
     public function getChannelsProperty(): Collection
     {
+        if (! Feature::Channels->isEnabled()) {
+            return collect();
+        }
+
         $joinedChannels = auth()->user()->channels()->whereNull('archived_at')->get();
 
         $publicChannels = Channel::where('type', 'public')
@@ -142,6 +160,10 @@ class Sidebar extends Component
 
     public function getBrowsableChannelsProperty(): Collection
     {
+        if (! Feature::Channels->isEnabled()) {
+            return collect();
+        }
+
         $joinedIds = auth()->user()->channels()->pluck('tc_channels.id');
 
         return Channel::where('type', 'public')
@@ -158,11 +180,10 @@ class Sidebar extends Component
 
     public function getAvailableUsersProperty(): Collection
     {
-        $userModel = config('team-chat.user_model');
-
-        return $userModel::where('id', '!=', auth()->id())
+        return FilamentTeamChatPlugin::get()
+            ->getAvailableUsersQuery(auth()->user())
             ->orderBy('name')
-            ->get(['id', 'name']);
+            ->get();
     }
 
     public function render()

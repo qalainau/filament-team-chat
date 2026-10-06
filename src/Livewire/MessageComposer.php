@@ -3,6 +3,7 @@
 namespace Filament\TeamChat\Livewire;
 
 use Filament\TeamChat\Actions\SendMessage;
+use Filament\TeamChat\FilamentTeamChatPlugin;
 use Filament\TeamChat\Models\Channel;
 use Filament\TeamChat\Models\Conversation;
 use Illuminate\Support\Collection;
@@ -82,9 +83,7 @@ class MessageComposer extends Component
             return collect();
         }
 
-        $userModel = config('team-chat.user_model');
-
-        $query = $userModel::where('id', '!=', auth()->id());
+        $query = FilamentTeamChatPlugin::get()->getAvailableUsersQuery(auth()->user());
 
         if ($this->mentionQuery !== '') {
             $query->where('name', 'like', $this->mentionQuery.'%');
@@ -103,7 +102,7 @@ class MessageComposer extends Component
             return;
         }
 
-        $body = trim($this->body) !== '' ? $this->body : '📎 ファイルを添付しました';
+        $body = trim($this->body) !== '' ? $this->body : '📎 '.__('team-chat::messages.attached_file');
 
         $messageable = $this->messageableType::findOrFail($this->messageableId);
 

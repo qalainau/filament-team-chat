@@ -2,15 +2,24 @@
 
 namespace Filament\TeamChat\Tests;
 
+use BladeUI\Heroicons\BladeHeroiconsServiceProvider;
+use BladeUI\Icons\BladeIconsServiceProvider;
+use Filament\Actions\ActionsServiceProvider;
 use Filament\FilamentServiceProvider;
+use Filament\Forms\FormsServiceProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Infolists\InfolistsServiceProvider;
+use Filament\Notifications\NotificationsServiceProvider;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Schemas\SchemasServiceProvider;
 use Filament\Support\SupportServiceProvider;
+use Filament\Tables\TablesServiceProvider;
 use Filament\TeamChat\FilamentTeamChatPlugin;
 use Filament\TeamChat\FilamentTeamChatServiceProvider;
+use Filament\Widgets\WidgetsServiceProvider;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Schema;
@@ -22,10 +31,21 @@ class TestCase extends Orchestra
 {
     protected function getPackageProviders($app): array
     {
+        // SupportServiceProvider must be registered before LivewireServiceProvider so that
+        // Filament's DataStore override is resolved once and shared, as in a real app.
         return [
-            LivewireServiceProvider::class,
-            FilamentServiceProvider::class,
+            BladeIconsServiceProvider::class,
+            BladeHeroiconsServiceProvider::class,
             SupportServiceProvider::class,
+            LivewireServiceProvider::class,
+            ActionsServiceProvider::class,
+            FormsServiceProvider::class,
+            InfolistsServiceProvider::class,
+            NotificationsServiceProvider::class,
+            SchemasServiceProvider::class,
+            TablesServiceProvider::class,
+            WidgetsServiceProvider::class,
+            FilamentServiceProvider::class,
             FilamentTeamChatServiceProvider::class,
             TestPanelProvider::class,
         ];
@@ -69,6 +89,7 @@ class TestCase extends Orchestra
 
         $app['config']->set('team-chat.user_model', Fixtures\User::class);
         $app['config']->set('session.driver', 'array');
+        $app['config']->set('app.key', 'base64:'.base64_encode(str_repeat('a', 32)));
     }
 }
 

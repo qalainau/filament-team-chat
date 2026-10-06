@@ -1,6 +1,15 @@
-<div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 px-4 py-3">
+<div class="flex items-center justify-between gap-2 border-b border-gray-200 dark:border-gray-700 px-4 py-3">
+    @if(! $isEditing)
+        <button
+            wire:click="$dispatch('show-chat-sidebar')"
+            class="shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 md:hidden"
+            title="{{ __('team-chat::messages.back') }}"
+        >
+            <x-heroicon-o-chevron-left class="h-5 w-5 rtl:rotate-180" />
+        </button>
+    @endif
     @if($headerName && ! $isEditing)
-        <div class="min-w-0">
+        <div class="min-w-0 flex-1">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white truncate">
                 @if($headerType === 'channel')
                     <span class="text-gray-400 me-1">#</span>
@@ -13,7 +22,7 @@
                 <p class="text-sm text-gray-500 dark:text-gray-400 truncate">{{ $headerDescription }}</p>
             @endif
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex shrink-0 items-center gap-2">
             <button wire:click="showMembers" class="flex items-center gap-1 text-sm text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" title="{{ __('team-chat::messages.members') }}">
                 <x-heroicon-o-users class="h-4 w-4" />
                 {{ $memberCount }}

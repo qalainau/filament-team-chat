@@ -3,6 +3,7 @@
 namespace Filament\TeamChat\Livewire;
 
 use Filament\TeamChat\Actions\SearchMessages;
+use Filament\TeamChat\Enums\Feature;
 use Filament\TeamChat\Models\Channel;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\On;
@@ -17,6 +18,10 @@ class SearchModal extends Component
     #[On('open-search')]
     public function open(): void
     {
+        if (! Feature::Search->isEnabled()) {
+            return;
+        }
+
         $this->isOpen = true;
         $this->query = '';
     }
@@ -29,7 +34,7 @@ class SearchModal extends Component
 
     public function getResultsProperty(): Collection
     {
-        if (strlen(trim($this->query)) < 2) {
+        if (! Feature::Search->isEnabled() || strlen(trim($this->query)) < 2) {
             return collect();
         }
 
