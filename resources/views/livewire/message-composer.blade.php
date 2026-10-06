@@ -3,14 +3,14 @@
         <div class="relative">
             {{-- Mention suggestions --}}
             @if($showMentionSuggestions)
-                <div class="absolute bottom-full left-0 mb-1 w-64 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 shadow-lg overflow-hidden z-10">
+                <div class="absolute bottom-full start-0 mb-1 w-64 rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 shadow-lg overflow-hidden z-10">
                     <button
                         wire:click="insertMention('channel')"
                         class="flex w-full items-center gap-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                     >
                         <span class="text-gray-400">#</span>
                         <span>channel</span>
-                        <span class="ml-auto text-xs text-gray-400">{{ __('team-chat::messages.notify_all') }}</span>
+                        <span class="ms-auto text-xs text-gray-400">{{ __('team-chat::messages.notify_all') }}</span>
                     </button>
                     <button
                         wire:click="insertMention('here')"
@@ -18,7 +18,7 @@
                     >
                         <span class="text-gray-400">@</span>
                         <span>here</span>
-                        <span class="ml-auto text-xs text-gray-400">{{ __('team-chat::messages.notify_online') }}</span>
+                        <span class="ms-auto text-xs text-gray-400">{{ __('team-chat::messages.notify_online') }}</span>
                     </button>
                     @foreach($this->mentionSuggestions as $user)
                         <button

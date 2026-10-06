@@ -50,7 +50,7 @@
 
         {{-- Thread Panel --}}
         @if($showThreadPanel && $threadParentId)
-            <div class="w-96 border-l border-gray-200 dark:border-gray-700 flex flex-col bg-white dark:bg-gray-900">
+            <div class="w-96 border-s border-gray-200 dark:border-gray-700 flex flex-col bg-white dark:bg-gray-900">
                 <livewire:team-chat::thread-panel :parent-message-id="$threadParentId" :wire:key="'thread-'.$threadParentId" />
             </div>
         @endif

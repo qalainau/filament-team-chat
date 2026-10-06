@@ -22,12 +22,12 @@
                                     {{ strtoupper(substr($member->name, 0, 1)) }}
                                 </div>
                                 <span @class([
-                                    'absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white dark:border-gray-800',
+                                    'absolute -bottom-0.5 -end-0.5 h-3 w-3 rounded-full border-2 border-white dark:border-gray-800',
                                     'bg-green-400' => $member->userStatus?->is_online,
                                     'bg-gray-300 dark:bg-gray-600' => ! $member->userStatus?->is_online,
                                 ])></span>
                             </div>
-                            <div class="min-w-0 flex-1 text-left">
+                            <div class="min-w-0 flex-1 text-start">
                                 <p class="text-sm font-medium text-gray-900 dark:text-white truncate">
                                     {{ $member->userStatus?->display_name ?? $member->name }}
                                 </p>

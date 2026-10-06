@@ -29,7 +29,7 @@
                         @endif
 
                         {{-- Action bar (visible on hover) --}}
-                        <div class="ml-auto flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div class="ms-auto flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                             <button
                                 wire:click="openThread({{ $message->id }})"
                                 class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-0.5"

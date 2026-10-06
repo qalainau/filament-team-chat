@@ -35,7 +35,7 @@
                         @foreach($this->results as $message)
                             <button
                                 wire:click="goToMessage({{ $message->id }}, '{{ addslashes($message->messageable_type) }}', {{ $message->messageable_id }})"
-                                class="flex w-full gap-3 px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                                class="flex w-full gap-3 px-4 py-3 text-start hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                                 wire:key="search-{{ $message->id }}"
                             >
                                 <div class="flex-shrink-0 pt-0.5">
