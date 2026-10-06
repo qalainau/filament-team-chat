@@ -55,7 +55,7 @@ trait HasTeamChat
     /**
      * Find or create a 1-on-1 DM with another user.
      */
-    public function findOrCreateDirectMessage(int $otherUserId): Conversation
+    public function findOrCreateDirectMessage(int|string $otherUserId): Conversation
     {
         $existing = $this->conversations()
             ->where('is_group', false)

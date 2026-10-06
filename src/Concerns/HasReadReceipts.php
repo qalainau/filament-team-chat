@@ -13,7 +13,7 @@ trait HasReadReceipts
         return $this->morphMany(ReadReceipt::class, 'readable');
     }
 
-    public function unreadCountFor(int $userId): int
+    public function unreadCountFor(int|string $userId): int
     {
         $receipt = $this->readReceipts()->where('user_id', $userId)->first();
 
@@ -28,7 +28,7 @@ trait HasReadReceipts
         return $query->count();
     }
 
-    public function getLastReadMessageIdFor(int $userId): ?int
+    public function getLastReadMessageIdFor(int|string $userId): ?int
     {
         return $this->readReceipts()
             ->where('user_id', $userId)

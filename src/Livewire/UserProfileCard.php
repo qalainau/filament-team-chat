@@ -9,7 +9,7 @@ class UserProfileCard extends Component
 {
     public bool $isOpen = false;
 
-    public ?int $userId = null;
+    public int|string|null $userId = null;
 
     public ?string $displayName = null;
 
@@ -22,7 +22,7 @@ class UserProfileCard extends Component
     public bool $isOnline = false;
 
     #[On('show-profile')]
-    public function loadProfile(int $userId): void
+    public function loadProfile(int|string $userId): void
     {
         $userModel = config('team-chat.user_model');
         $user = $userModel::with('userStatus')->find($userId);

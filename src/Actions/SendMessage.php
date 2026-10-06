@@ -15,7 +15,7 @@ class SendMessage
     /**
      * @param  array<UploadedFile>  $files
      */
-    public function execute(Model $messageable, int $userId, string $body, ?int $parentId = null, array $files = []): Message
+    public function execute(Model $messageable, int|string $userId, string $body, ?int $parentId = null, array $files = []): Message
     {
         $bodyHtml = Str::markdown($body);
 
