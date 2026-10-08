@@ -7,6 +7,7 @@
 ![PHP 8.3+](https://img.shields.io/badge/PHP-8.3+-blue?style=flat-square)
 ![Tests](https://img.shields.io/badge/Tests-102%20passing-brightgreen?style=flat-square)
 ![License MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)
+[![Newsletter](https://img.shields.io/badge/newsletter-subscribe-0ea5a3.svg?style=flat-square)](https://webllsystem.com/filament/?ref=filament-team-chat)
 
 ---
 
@@ -343,6 +344,12 @@ php artisan test --filter=TeamChat
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+
+## Stay Updated
+
+Get release notes, upgrade guides for new Filament versions, and early access to new plugins — a few emails a year, no spam.
+
+**[Subscribe to the newsletter →](https://webllsystem.com/filament/?ref=filament-team-chat)**
 
 ## License
 
