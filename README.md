@@ -347,7 +347,7 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 
 ## More Filament Plugins
 
-Need Filament screens that stay fast with real amounts of data? Check out **[Warp](https://warpui.com/)** — premium Filament v5 plugins with canvas-based rendering for large datasets.
+Need Filament screens that stay fast with real amounts of data? Check out **[WarpUI](https://warpui.com/)** — premium Filament v5 plugins with canvas-based rendering for large datasets.
 
 ## Stay Updated
 
