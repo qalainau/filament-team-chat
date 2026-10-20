@@ -345,6 +345,10 @@ php artisan test --filter=TeamChat
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
 
+## More Filament Plugins
+
+Need Filament screens that stay fast with real amounts of data? Check out **[Warp](https://warpui.com/)** — premium Filament v5 plugins with canvas-based rendering for large datasets.
+
 ## Stay Updated
 
 Get release notes, upgrade guides for new Filament versions, and early access to new plugins — a few emails a year, no spam.
